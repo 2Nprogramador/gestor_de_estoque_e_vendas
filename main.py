@@ -147,32 +147,32 @@ def saida_vendas():
 
 
 # Página de Visualização de Estoque e Vendas (com aprimoramento)
-def visualizar_dados():
-    st.header("Registro de Estoque")
-    st.dataframe(registro_estoque_df)
+    def visualizar_dados():
+        st.header("Registro de Estoque")
+        st.dataframe(registro_estoque_df)
 
-    st.header("Vendas")
-    st.dataframe(vendas_df)
+        st.header("Vendas")
+        st.dataframe(vendas_df)
 
-    st.header("Estoque Atualizado")
-    estoque_atualizado_df = calcular_estoque_atualizado()
-    st.dataframe(estoque_atualizado_df)
+        st.header("Estoque Atualizado")
+        estoque_atualizado_df = calcular_estoque_atualizado()
+        st.dataframe(estoque_atualizado_df)
 
     # Calcula o custo total das vendas
-    vendas_df = pd.merge(vendas_df, registro_estoque_df[["Produto", "Lote", "Custo (R$)"]],
+        vendas_df = pd.merge(vendas_df, registro_estoque_df[["Produto", "Lote", "Custo (R$)"]],
                          on=["Produto", "Lote"], how="left")
-    vendas_df["Custo Total (R$)"] = vendas_df["Custo (R$)"] * vendas_df["Quantidade"]
-
+        vendas_df["Custo Total (R$)"] = vendas_df["Custo (R$)"] * vendas_df["Quantidade"]
+    
     # Calcula o lucro total
-    lucro_total = vendas_df["Valor Total (R$)"].sum() - vendas_df["Custo Total (R$)"].sum()
+        lucro_total = vendas_df["Valor Total (R$)"].sum() - vendas_df["Custo Total (R$)"].sum()
 
     # Calcula o produto mais vendido
-    produto_mais_vendido = vendas_df.groupby("Produto")["Quantidade"].sum().idxmax()
+        produto_mais_vendido = vendas_df.groupby("Produto")["Quantidade"].sum().idxmax()
 
     # Calcula o custo em estoque
-    custo_em_estoque = estoque_atualizado_df["Custos Totais"].sum()
+        custo_em_estoque = estoque_atualizado_df["Custos Totais"].sum()
 
-    mostrar_informacoes_negocio = st.sidebar.checkbox("Mostrar Informações do Negócio", value=False)
+        mostrar_informacoes_negocio = st.sidebar.checkbox("Mostrar Informações do Negócio", value=False)
 
     if mostrar_informacoes_negocio:
         st.header("Informações sobre o Negócio")
