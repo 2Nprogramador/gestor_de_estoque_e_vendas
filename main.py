@@ -158,8 +158,13 @@ def visualizar_dados():
     estoque_atualizado_df = calcular_estoque_atualizado()
     st.dataframe(estoque_atualizado_df)
 
+    # Calcula o custo total das vendas
+    vendas_df = pd.merge(vendas_df, registro_estoque_df[["Produto", "Lote", "Custo (R$)"]],
+                         on=["Produto", "Lote"], how="left")
+    vendas_df["Custo Total (R$)"] = vendas_df["Custo (R$)"] * vendas_df["Quantidade"]
+
     # Calcula o lucro total
-    lucro_total = vendas_df["Valor Total (R$)"].sum() - estoque_atualizado_df["Custos Totais"].sum()
+    lucro_total = vendas_df["Valor Total (R$)"].sum() - vendas_df["Custo Total (R$)"].sum()
 
     # Calcula o produto mais vendido
     produto_mais_vendido = vendas_df.groupby("Produto")["Quantidade"].sum().idxmax()
@@ -169,8 +174,6 @@ def visualizar_dados():
 
     mostrar_informacoes_negocio = st.sidebar.checkbox("Mostrar Informações do Negócio", value=False)
 
-# Dentro da função visualizar_dados(), envolva as seções de exibição das informações do negócio
-# com uma estrutura condicional que verifica o valor de mostrar_informacoes_negocio
     if mostrar_informacoes_negocio:
         st.header("Informações sobre o Negócio")
         st.subheader("Lucro Total")
