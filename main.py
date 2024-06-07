@@ -165,7 +165,7 @@ def visualizar_dados():
     produto_mais_vendido = vendas_df.groupby("Produto")["Quantidade"].sum().idxmax()
 
     # Calcula o custo em estoque
-    custo_em_estoque = registro_estoque_df["Custo (R$)"].sum()
+    custo_em_estoque = registro_estoque_df["Custos Totais"].sum()
 
     mostrar_informacoes_negocio = st.sidebar.checkbox("Mostrar Informações do Negócio", value=False)
 
